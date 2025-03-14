@@ -2,11 +2,24 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
-// Enable CORS for all routes, allowing requests from your GitHub Pages origin
+// List of allowed origins
+const allowedOrigins = [
+    "https://makethemaker.github.io", // Production
+    "http://127.0.0.1:5500"          // Local development
+];
+
+// Configure CORS to allow specific origins dynamically
 app.use(cors({
-    origin: ["https://makethemaker.github.io", "http://127.0.0.1:5500/"], // Restrict to your GitHub Pages domain
-    methods: ["GET", "POST", "OPTIONS"],     // Allow necessary methods
-    allowedHeaders: ["Content-Type"],        // Allow your request header
+    origin: (origin, callback) => {
+        // Allow requests with no origin (e.g., curl) or if origin is in allowed list
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, origin || "*"); // Reflect the origin or use "*" if no origin
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"]
 }));
 
 app.use(express.text()); // Parse plain text bodies
