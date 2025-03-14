@@ -27,6 +27,9 @@ const icsCors = cors({
     methods: ["GET", "OPTIONS"]
 });
 
+// Map to store ICS files (defined before routes)
+const icsStore = new Map();
+
 app.use(express.text());
 
 // Apply CORS middleware to specific routes
@@ -36,7 +39,7 @@ app.post("/upload", uploadCors, (req, res) => {
     icsStore.set(id, req.body);
     const url = `https://tyovuoro-ics-render.onrender.com/ics/${id}`;
     res.json({ url });
-    setTimeout(() => icsStore.delete(id), 60 * 60 * 1000);
+    setTimeout(() => icsStore.delete(id), 60 * 60 * 1000); // Cleanup after 1 hour
 });
 
 app.get("/ics/:id", icsCors, (req, res) => {
