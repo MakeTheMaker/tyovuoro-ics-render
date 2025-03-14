@@ -4,7 +4,7 @@ const app = express();
 
 // Enable CORS for all routes, allowing requests from your GitHub Pages origin
 app.use(cors({
-    origin: "https://makethemaker.github.io", // Restrict to your GitHub Pages domain
+    origin: ["https://makethemaker.github.io", "http://127.0.0.1:5500/"], // Restrict to your GitHub Pages domain
     methods: ["GET", "POST", "OPTIONS"],     // Allow necessary methods
     allowedHeaders: ["Content-Type"],        // Allow your request header
 }));
